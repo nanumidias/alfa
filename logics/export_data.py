@@ -1,6 +1,9 @@
 import streamlit as st
 import pandas as pd
 import io
+import xlsxwriter
+
+
 from logics.fetch_google_analytics_data import *
 
 from logics.load_data import google_api_data_load
@@ -100,21 +103,22 @@ def export_data(start_date, end_date):
 
 
     def create_excel_file():
-        with io.BytesIO() as buffer:    
-            with pd.ExcelWriter('Export/Export_Data.xlsx') as writer:
-                combine_facebook_data.to_excel(writer, sheet_name='Facebook', index=False)
-                ads_insights.to_excel(writer, sheet_name='Facebook Ads', index=False)
-                google_analytics.to_excel(writer, sheet_name='Google Anaytics', index=False)
-                google_ads_data.to_excel(writer, sheet_name='Google Ads', index=False)
-                instagram_data_dictionary.to_excel(writer, sheet_name='Instagram', index=False)
-            return buffer.getvalue()
+        output = io.BytesIO()
+        with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+            combine_facebook_data.to_excel(writer, sheet_name='Facebook', index=False)
+            ads_insights.to_excel(writer, sheet_name='Facebook Ads', index=False)
+            google_analytics.to_excel(writer, sheet_name='Google Anaytics', index=False)
+            google_ads_data.to_excel(writer, sheet_name='Google Ads', index=False)
+            instagram_data_dictionary.to_excel(writer, sheet_name='Instagram', index=False)
+        output.seek(0)
+        return output
     
     st.sidebar.success("Data Export Successfully")
 
     excel_data = create_excel_file()
     st.sidebar.download_button(label='Click here to download',
-                    data=excel_data,
-                    file_name='Export_Data.xlsx',
-                    mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+                       data=excel_data,
+                       file_name='Export_Data.xlsx',
+                       mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
 

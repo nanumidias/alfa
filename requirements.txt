@@ -66,4 +66,5 @@ tzdata==2024.1
 urllib3==2.2.2
 watchdog==4.0.1
 wcwidth==0.2.13
+XlsxWriter==3.2.0
 yarl==1.9.4
