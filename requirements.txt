@@ -9,6 +9,7 @@ charset-normalizer==3.3.2
 click==8.1.7
 colorama==0.4.6
 curlify==2.2.1
+et-xmlfile==1.1.0
 facebook_business==20.0.0
 frozenlist==1.4.1
 gitdb==4.0.11
@@ -28,6 +29,7 @@ MarkupSafe==2.1.5
 mdurl==0.1.2
 multidict==6.0.5
 numpy==2.0.0
+openpyxl==3.1.5
 packaging==24.1
 pandas==2.2.2
 pillow==10.3.0
