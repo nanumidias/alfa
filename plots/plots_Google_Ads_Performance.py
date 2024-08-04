@@ -74,6 +74,7 @@ def google_ads_cost_perclick(data):
     simple_campaigns = df["simpleCampaignName"].unique().tolist()
     days = df["dayOfWeek"].unique().tolist()
 
+
     combined_costs = {campaign: [] for campaign in simple_campaigns}
 
     for day in days:
@@ -82,9 +83,23 @@ def google_ads_cost_perclick(data):
             campaign_data = day_data[day_data["simpleCampaignName"] == campaign]
             if not campaign_data.empty:
                 total_cost = campaign_data["advertiserAdCost"].sum() + campaign_data["advertiserAdCostPerClick"].sum()
-                combined_costs[campaign].append(total_cost)
+                rounded_total_cost = round(total_cost, 2)
+                combined_costs[campaign].append(rounded_total_cost)
             else:
                 combined_costs[campaign].append(0)
+
+
+    # combined_costs = {campaign: [] for campaign in simple_campaigns}
+
+    # for day in days:
+    #     day_data = df[df["dayOfWeek"] == day]
+    #     for campaign in simple_campaigns:
+    #         campaign_data = day_data[day_data["simpleCampaignName"] == campaign]
+    #         if not campaign_data.empty:
+    #             total_cost = campaign_data["advertiserAdCost"].sum() + campaign_data["advertiserAdCostPerClick"].sum()
+    #             combined_costs[campaign].append(total_cost)
+    #         else:
+    #             combined_costs[campaign].append(0)
 
     # Dictionary for mapping English days to Portuguese days
     day_mapping = {
@@ -138,14 +153,16 @@ def google_ads_cost_perclick(data):
 
 
 
-
 def advertiserAdCostPerClick(data):
     df = pd.DataFrame(data)
     campaigns = df["campaignName"].unique().tolist()
     months = df["month"].unique().tolist()
     series_data = []
+
+    
     for campaign in campaigns:
         campaign_data = df[df['campaignName'] == campaign]
+        rounded_data = campaign_data['advertiserAdCostPerClick'].astype(float).apply(lambda x: round(x, 2)).tolist()
         series_data.append({
             "name": campaign,
             "type": "line",
@@ -154,8 +171,20 @@ def advertiserAdCostPerClick(data):
             "emphasis": {
                 "focus": "series"
             },
-            "data": campaign_data['advertiserAdCostPerClick'].tolist()
+            "data": rounded_data
         })
+    # for campaign in campaigns:
+    #     campaign_data = df[df['campaignName'] == campaign]
+    #     series_data.append({
+    #         "name": campaign,
+    #         "type": "line",
+    #         "stack": "Total",
+    #         "areaStyle": {},
+    #         "emphasis": {
+    #             "focus": "series"
+    #         },
+    #         "data": campaign_data['advertiserAdCostPerClick'].tolist()
+    #     })
     options = {
         "title": {
             "subtext": "Custo de Anúncio Vs Custo por Clique no Anúncio (ROI)",
@@ -216,7 +245,8 @@ def returnOnAdSpend(data):
     df["simpleCampaignName"] = df["campaignName"].apply(lambda x: x.split(' - ')[-1])
     summed_data = df.groupby("simpleCampaignName")["returnOnAdSpend"].sum().reset_index()
     campaigns = summed_data["simpleCampaignName"].tolist()
-    return_values = summed_data["returnOnAdSpend"].tolist()
+    # return_values = summed_data["returnOnAdSpend"].tolist()
+    return_values = [round(float(x)) for x in summed_data['returnOnAdSpend'].tolist()]
     options = {
         "title": {
             "subtext": "Retorno do Investimento em Anúncios por Campanha",

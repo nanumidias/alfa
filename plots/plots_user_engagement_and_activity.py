@@ -220,10 +220,13 @@ def source_activeUsers(data):
 #     st_echarts(options=options, height="400px", width="650px")
 
 
+
+
 def eventName_eventCount_eventCountPerUser(data):
         events = data['eventName'].tolist()
         event_counts = data['eventCount'].tolist()
-        event_counts_per_user = data['eventCountPerUser'].tolist()
+        # event_counts_per_user = data['eventCountPerUser'].tolist()
+        event_counts_per_user = [round(float(x)) for x in data['eventCountPerUser'].tolist()]  # Convert to floats and round
         options = {
             "title": {
                 "text": " ",
@@ -379,7 +382,10 @@ def session_over_time(data):
     dates                  = data['date'].tolist()
     sessions               = data['sessions'].tolist()
     engaged_sessions       = data['engagedSessions'].tolist()
-    averageSessionDuration = data['averageSessionDuration'].tolist()
+    # averageSessionDuration = data['averageSessionDuration'].tolist()
+
+    numeric_values = pd.to_numeric(data['averageSessionDuration'], errors='coerce')
+    averageSessionDuration = [round(value, 1) for value in numeric_values if not pd.isna(value)]
     engagementRate         = data['engagementRate'].tolist()
     bounceRate             = data['bounceRate'].tolist()
     screenPageViews        = data['screenPageViews'].tolist()
@@ -437,37 +443,57 @@ def session_over_time(data):
     }
     st_echarts(options=options)
 
+
+
+
+
+
 def session_over_dayOfWeeks(data):
     data['sessions'] = pd.to_numeric(data['sessions'])
     data['engagedSessions'] = pd.to_numeric(data['engagedSessions'])
-    data['averageSessionDuration'] = pd.to_numeric(data['averageSessionDuration'])
-    data['engagementRate'] = pd.to_numeric(data['engagementRate'])
-    data['bounceRate'] = pd.to_numeric(data['bounceRate'])
+    # data['averageSessionDuration'] = pd.to_numeric(data['averageSessionDuration'])
+    # data['engagementRate'] = pd.to_numeric(data['engagementRate'])
+    # data['bounceRate'] = pd.to_numeric(data['bounceRate'])
+
+    # Assuming data is your DataFrame
+    data['averageSessionDuration'] = data['averageSessionDuration'].astype(float).round(2)
+    data['engagementRate'] = data['engagementRate'].astype(float).round(2)
+    data['bounceRate'] = data['bounceRate'].astype(float).round(2)
+
     data['screenPageViews'] = pd.to_numeric(data['screenPageViews'])
     data['eventCount'] = pd.to_numeric(data['eventCount'])
-    days = sorted(data['dayOfWeek'].unique().tolist())
+
+    # Define the correct order of days in English
+    correct_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    
+    # Sort the days in the correct order
+    days = sorted(data['dayOfWeek'].unique().tolist(), key=lambda x: correct_order.index(x))
+    
     sessions = data.groupby('dayOfWeek')['sessions'].sum().reindex(days).tolist()
     engagedSessions = data.groupby('dayOfWeek')['engagedSessions'].sum().reindex(days).tolist()
-    averageSessionDuration = data.groupby('dayOfWeek')['averageSessionDuration'].mean().reindex(days).tolist()
-    engagementRate = data.groupby('dayOfWeek')['engagementRate'].mean().reindex(days).tolist()
-    bounceRate = data.groupby('dayOfWeek')['bounceRate'].mean().reindex(days).tolist()
+    # averageSessionDuration = data.groupby('dayOfWeek')['averageSessionDuration'].mean().reindex(days).tolist()
+    # engagementRate = data.groupby('dayOfWeek')['engagementRate'].mean().reindex(days).tolist()
+    # bounceRate = data.groupby('dayOfWeek')['bounceRate'].mean().reindex(days).tolist()
+    # Group by 'dayOfWeek' and calculate the mean for each metric, then reindex and round to 2 decimal places
+    averageSessionDuration = data.groupby('dayOfWeek')['averageSessionDuration'].mean().reindex(days).round(2).tolist()
+    engagementRate = data.groupby('dayOfWeek')['engagementRate'].mean().reindex(days).round(2).tolist()
+    bounceRate = data.groupby('dayOfWeek')['bounceRate'].mean().reindex(days).round(2).tolist()
+
     screenPageViews = data.groupby('dayOfWeek')['screenPageViews'].sum().reindex(days).tolist()
     eventCount = data.groupby('dayOfWeek')['eventCount'].sum().reindex(days).tolist()
 
-
-
     # Dictionary for mapping English days to Portuguese days
     day_mapping = {
-        'Wednesday': 'Quarta-feira',
-        'Tuesday': 'Terça-feira',
-        'Thursday': 'Quinta-feira',
-        'Saturday': 'Sábado',
-        'Sunday': 'Domingo',
         'Monday': 'Segunda-feira',
-        'Friday': 'Sexta-feira'
+        'Tuesday': 'Terça-feira',
+        'Wednesday': 'Quarta-feira',
+        'Thursday': 'Quinta-feira',
+        'Friday': 'Sexta-feira',
+        'Saturday': 'Sábado',
+        'Sunday': 'Domingo'
     }
-    translated_days = [day_mapping[day] for day in days]
 
+    translated_days = [day_mapping[day] for day in days]
 
     options = {
         "title": {
@@ -540,7 +566,128 @@ def session_over_dayOfWeeks(data):
             }
         ]
     }
-    st_echarts(options=options)
+    st_echarts(options=options, height="400px", width="950px")
+
+
+
+
+
+
+# def session_over_dayOfWeeks(data):
+#     data['sessions'] = pd.to_numeric(data['sessions'])
+#     data['engagedSessions'] = pd.to_numeric(data['engagedSessions'])
+#     data['averageSessionDuration'] = pd.to_numeric(data['averageSessionDuration'])
+#     data['engagementRate'] = pd.to_numeric(data['engagementRate'])
+#     data['bounceRate'] = pd.to_numeric(data['bounceRate'])
+#     data['screenPageViews'] = pd.to_numeric(data['screenPageViews'])
+#     data['eventCount'] = pd.to_numeric(data['eventCount'])
+#     days = sorted(data['dayOfWeek'].unique().tolist())
+#     sessions = data.groupby('dayOfWeek')['sessions'].sum().reindex(days).tolist()
+#     engagedSessions = data.groupby('dayOfWeek')['engagedSessions'].sum().reindex(days).tolist()
+#     averageSessionDuration = data.groupby('dayOfWeek')['averageSessionDuration'].mean().reindex(days).tolist()
+#     engagementRate = data.groupby('dayOfWeek')['engagementRate'].mean().reindex(days).tolist()
+#     bounceRate = data.groupby('dayOfWeek')['bounceRate'].mean().reindex(days).tolist()
+#     screenPageViews = data.groupby('dayOfWeek')['screenPageViews'].sum().reindex(days).tolist()
+#     eventCount = data.groupby('dayOfWeek')['eventCount'].sum().reindex(days).tolist()
+
+
+
+#     # # Dictionary for mapping English days to Portuguese days
+#     # day_mapping = {
+#     #     'Wednesday': 'Quarta-feira',
+#     #     'Tuesday': 'Terça-feira',
+#     #     'Thursday': 'Quinta-feira',
+#     #     'Saturday': 'Sábado',
+#     #     'Sunday': 'Domingo',
+#     #     'Monday': 'Segunda-feira',
+#     #     'Friday': 'Sexta-feira'
+#     # }
+#     # Dictionary for mapping English days to Portuguese days
+#     day_mapping = {
+#         'Monday': 'Segunda-feira',
+#         'Tuesday': 'Terça-feira',
+#         'Wednesday': 'Quarta-feira',
+#         'Thursday': 'Quinta-feira',
+#         'Friday': 'Sexta-feira',
+#         'Saturday': 'Sábado',
+#         'Sunday': 'Domingo'
+#     }
+
+#     translated_days = [day_mapping[day] for day in days]
+
+
+#     options = {
+#         "title": {
+#             "subtext": "Sessões ao Longo dos Dias da Semana"
+#         },
+#         "tooltip": {
+#             "trigger": "axis"
+#         },
+#         "legend": {
+#             "data": ["Sessões", "Sessões Engajadas", "Avg Session Duration", 
+#                      "Taxa de Engajamento", "Taxa de Rejeição", "Visualizações de Páginas/Telas", 
+#                      "Contagem de Eventos"],
+#             "orient": "horizontal",
+#             "bottom": 0
+#         },
+#         "grid": {
+#             "left": "3%",
+#             "right": "4%",
+#             "containLabel": True
+#         },
+#         "xAxis": {
+#             "type": "value"
+#         },
+#         "yAxis": {
+#             "type": "category",
+#             "data": translated_days
+#         },
+#         "series": [
+#             {
+#                 "name": "Sessões",
+#                 "type": "bar",
+#                 "stack": "total",
+#                 "data": sessions
+#             },
+#             {
+#                 "name": "Sessões Engajadas",
+#                 "type": "bar",
+#                 "stack": "total",
+#                 "data": engagedSessions
+#             },
+#             {
+#                 "name": "Avg Session Duration",
+#                 "type": "bar",
+#                 "stack": "total",
+#                 "data": averageSessionDuration
+#             },
+#             {
+#                 "name": "Taxa de Engajamento",
+#                 "type": "bar",
+#                 "stack": "total",
+#                 "data": engagementRate
+#             },
+#             {
+#                 "name": "Taxa de Rejeição",
+#                 "type": "bar",
+#                 "stack": "total",
+#                 "data": bounceRate
+#             },
+#             {
+#                 "name": "Visualizações de Páginas/Telas",
+#                 "type": "bar",
+#                 "stack": "total",
+#                 "data": screenPageViews
+#             },
+#             {
+#                 "name": "Contagem de Eventos",
+#                 "type": "bar",
+#                 "stack": "total",
+#                 "data": eventCount
+#             }
+#         ]
+#     }
+#     st_echarts(options=options)
 
 def session_over_OS_Device_Browser(data):
     fig = px.sunburst(

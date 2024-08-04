@@ -16,8 +16,14 @@ from logics.utilis import facebook_apis_tokens
 from logics.date_range import date_range_for_ads
 
 
+from facebook_business.api import FacebookAdsApi
+
 access_token            = st.secrets["access_tokens"]["user_access_token"]
 instagram_user_id       = st.secrets["instagram"]["instagram_user_id"]
+
+(page_access_token, user_access_token, 
+ page_id, adaccount_account_id, adaccount_id) = facebook_apis_tokens()
+FacebookAdsApi.init(access_token= page_access_token)
 
 def export_data(start_date, end_date):
     (page_access_token, user_access_token, 
@@ -35,14 +41,18 @@ def export_data(start_date, end_date):
     ads_insights  = pd.DataFrame(ads_insights_)
     # FACEBOOK DATA
     (
-     page_insights, dates, page_post_engagements, page_impressions, page_impressions_unique, 
-     page_fans, unique_page_fan, page_follows, page_views, 
-     page_negative_feedback_unique, page_impressions_viral, 
-     page_fan_adds_by_paid_non_paid_unique, page_daily_follows_unique, 
-     page_daily_unfollows_unique, page_impressions_by_age_gender_unique, 
-     page_impressions_organic_unique_v2, page_impressions_paid, post_reactions, 
-     page_fans_country, page_fan_adds, page_fan_removes
-     )  = facebook_api_data_load(page_id, start_date, end_date)
+    page_insights, dates, page_post_engagements, 
+    page_impressions, page_impressions_unique, 
+    page_fans, unique_page_fan, page_follows, 
+    page_views, page_negative_feedback_unique, 
+    page_impressions_viral, 
+    page_fan_adds_by_paid_non_paid_unique, 
+    page_daily_follows_unique, page_daily_unfollows_unique, 
+    page_impressions_by_age_gender_unique, 
+    page_impressions_organic_unique_v2, 
+    page_impressions_paid, post_reactions, 
+    page_fans_country, page_fan_adds, 
+    page_fan_removes)  = facebook_api_data_load(page_id, start_date, end_date)
     facebook_data_dictionary = {                            
                             'dates': dates,
                             'page_post_engagements':              page_post_engagements,
