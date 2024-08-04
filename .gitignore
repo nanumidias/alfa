@@ -1,0 +1,7 @@
+# Virtual environment
+myvenv/
+.streamlit/secrets.toml
+.env
+
+# Credentials file
+credentials.json
