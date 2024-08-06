@@ -27,6 +27,7 @@ try:
     data_, total_data_ = google_api_data_load(start_date, end_date, client, property_id)
     data       = pd.DataFrame(data_)
     total_data = pd.DataFrame(total_data_)
+    
     data['date']      = pd.to_datetime(data['date'], format='%Y%m%d')
     data['date']      = data['date'].dt.strftime('%Y-%m-%d')
     data['dayOfWeek'] = pd.to_datetime(data['date']).dt.day_name()

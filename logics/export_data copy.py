@@ -72,16 +72,27 @@ def export_data(start_date, end_date):
                         }
     
 
+
     # Find the maximum length of the arrays
     max_length = max(len(v) for v in facebook_data_dictionary.values())
+
     # Pad the shorter arrays with None
     for key in facebook_data_dictionary:
         if len(facebook_data_dictionary[key]) < max_length:
             facebook_data_dictionary[key].extend([None] * (max_length - len(facebook_data_dictionary[key])))
 
+    # Create the DataFrame
+    facebook_dictionary  = pd.DataFrame(facebook_data_dictionary)
 
 
-    facebook_dictionary     = pd.DataFrame(facebook_data_dictionary)
+
+
+
+
+
+
+
+    # facebook_dictionary     = pd.DataFrame(facebook_data_dictionary)
     page_fans_country_data  = pd.DataFrame(page_fans_country)
     combine_facebook_data   = pd.concat([facebook_dictionary, 
                                        page_follows, page_views,
@@ -116,80 +127,52 @@ def export_data(start_date, end_date):
 
 
 
-    def create_excel_file():
-        output = io.BytesIO()
-        with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
-            # Write each DataFrame to a different worksheet
-            combine_facebook_data.to_excel(writer, sheet_name='Facebook', index=False)
-            ads_insights.to_excel(writer, sheet_name='Facebook Ads', index=False)
-            google_analytics.to_excel(writer, sheet_name='Google Analytics', index=False)
-            google_ads_data.to_excel(writer, sheet_name='Google Ads', index=False)
-            instagram_data_dictionary.to_excel(writer, sheet_name='Instagram', index=False)
-            
-            # Access the workbook and worksheets
-            workbook  = writer.book
-            worksheets = {
-                'Facebook': writer.sheets['Facebook'],
-                'Facebook Ads': writer.sheets['Facebook Ads'],
-                'Google Analytics': writer.sheets['Google Analytics'],
-                'Google Ads': writer.sheets['Google Ads'],
-                'Instagram': writer.sheets['Instagram'],
-            }
-            
-            # Set the column width for each worksheet
-            # Excel column width unit: 1 unit = 1/256th of the width of the zero character
-            # Approximate conversion: 300 pixels ≈ 40 Excel column width units
-            column_width = 40
-            
-            for sheet_name, worksheet in worksheets.items():
-                if sheet_name == 'Facebook':
-                    num_columns = len(combine_facebook_data.columns)
-                elif sheet_name == 'Facebook Ads':
-                    num_columns = len(ads_insights.columns)
-                elif sheet_name == 'Google Analytics':
-                    num_columns = len(google_analytics.columns)
-                elif sheet_name == 'Google Ads':
-                    num_columns = len(google_ads_data.columns)
-                elif sheet_name == 'Instagram':
-                    num_columns = len(instagram_data_dictionary.columns)
-                
-                for col_num in range(num_columns):
-                    worksheet.set_column(col_num, col_num, column_width)
-                    
-        output.seek(0)
-        return output
-
-    # Sidebar success message and download button
-    st.sidebar.success("Data Export Successfully")
-
-    try:
-        excel_data = create_excel_file()
-        st.sidebar.download_button(label='Click here to download',
-                                data=excel_data,
-                                file_name='Export_Data.xlsx',
-                                mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    except Exception as e:
-        st.sidebar.error(f"An error occurred: {e}")
-
-
-
     # def create_excel_file():
     #     output = io.BytesIO()
     #     with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
     #         combine_facebook_data.to_excel(writer, sheet_name='Facebook', index=False)
     #         ads_insights.to_excel(writer, sheet_name='Facebook Ads', index=False)
-    #         google_analytics.to_excel(writer, sheet_name='Google Anaytics', index=False)
+    #         google_analytics.to_excel(writer, sheet_name='Google Analytics', index=False)
     #         google_ads_data.to_excel(writer, sheet_name='Google Ads', index=False)
     #         instagram_data_dictionary.to_excel(writer, sheet_name='Instagram', index=False)
+            
+    #         # Get the xlsxwriter workbook and worksheet objects
+    #         workbook  = writer.book
+    #         worksheet = writer.sheets['Facebook']
+            
+    #         # Set the column width for the Facebook sheet
+    #         worksheet.set_column('A:Z', 20)  # Adjust the column width as needed
+        
     #     output.seek(0)
     #     return output
-    
+
     # st.sidebar.success("Data Export Successfully")
 
     # excel_data = create_excel_file()
     # st.sidebar.download_button(label='Click here to download',
-    #                    data=excel_data,
-    #                    file_name='Export_Data.xlsx',
-    #                    mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    #                 data=excel_data,
+    #                 file_name='Export_Data.xlsx',
+    #                 mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+
+
+
+    def create_excel_file():
+        output = io.BytesIO()
+        with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+            combine_facebook_data.to_excel(writer, sheet_name='Facebook', index=False)
+            ads_insights.to_excel(writer, sheet_name='Facebook Ads', index=False)
+            google_analytics.to_excel(writer, sheet_name='Google Anaytics', index=False)
+            google_ads_data.to_excel(writer, sheet_name='Google Ads', index=False)
+            instagram_data_dictionary.to_excel(writer, sheet_name='Instagram', index=False)
+        output.seek(0)
+        return output
+    
+    st.sidebar.success("Data Export Successfully")
+
+    excel_data = create_excel_file()
+    st.sidebar.download_button(label='Click here to download',
+                       data=excel_data,
+                       file_name='Export_Data.xlsx',
+                       mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
 

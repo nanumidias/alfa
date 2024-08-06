@@ -11,7 +11,8 @@ from pyecharts.commons.utils import JsCode
 
 def averageSessionDuration_continent(data):
         countries = data['continent'].tolist()
-        durations = data['averageSessionDuration'].tolist()
+        # durations = data['averageSessionDuration'].tolist()
+        durations = [round(float(x)) for x in data['averageSessionDuration'].tolist()]
         unique_data = {}
         for country, duration in zip(countries, durations):
             if country not in unique_data:
@@ -154,6 +155,7 @@ def source_activeUsers(data):
     ]
     options = {
         "title": {
+            "subtext": "Usuários ativos",
             "text": "",
             "left": "center"
         },
@@ -165,7 +167,7 @@ def source_activeUsers(data):
         },
         "series": [
             {
-                "name": "Active Users",
+                "name": "Usuários ativos",
                 "type": "pie",
                 "radius": ["30%", "75%"],
                 "center": ["50%", "60%"],

@@ -374,6 +374,11 @@ def page_impressions_organic_paid(page_impressions_organic_unique_v2, page_impre
     st_echarts(options=options, height=400, width=1350)
 
 
+
+
+
+
+
 def page_actions_post_reactions(post_reactions, dates):
     df = pd.DataFrame(post_reactions)
     df.fillna(0, inplace=True)
@@ -384,12 +389,12 @@ def page_actions_post_reactions(post_reactions, dates):
     percentage_reactions = (total_reactions / total) * 100
     # Prepare data for the pie chart with emojis
     emoji_labels = {
-        'love' : '❤️',
-        'haha' : '😂',
-        'wow'  : '😮',
-        'sad'  : '😢',
+        'love': '❤️',
+        'haha': '😂',
+        'wow': '😮',
+        'sad': '😢',
         'angry': '😡',
-        'like' : '👍',
+        'like': '👍',
     }
     data = [list(z) for z in zip(percentage_reactions.index, total_reactions, percentage_reactions)]
     # Create a pie chart
@@ -399,14 +404,49 @@ def page_actions_post_reactions(post_reactions, dates):
             series_name="Reações",
             data_pair=[[emoji_labels.get(item[0], item[0]), item[1]] for item in data],
             radius=["40%", "75%"],
-            label_opts=opts.LabelOpts(is_show=True, formatter="{b}: {d}%")
+            label_opts=opts.LabelOpts(is_show=False),  # Disable labels
         )
         .set_global_opts(
-            title_opts  = opts.TitleOpts(title="Porcentagem por Reações"),
-            legend_opts = opts.LegendOpts(orient="vertical", pos_top="15%", pos_left="2%"),
+            title_opts=opts.TitleOpts(title="Porcentagem por Reações"),
+            legend_opts=opts.LegendOpts(is_show=False),  # Disable legends
         )
     )
     st_pyecharts(pie_chart)
+
+
+# def page_actions_post_reactions(post_reactions, dates):
+#     df = pd.DataFrame(post_reactions)
+#     df.fillna(0, inplace=True)
+#     # Sum the values of each reaction type
+#     total_reactions = df.sum()
+#     # Calculate the percentage for each reaction type
+#     total = total_reactions.sum()
+#     percentage_reactions = (total_reactions / total) * 100
+#     # Prepare data for the pie chart with emojis
+#     emoji_labels = {
+#         'love' : '❤️',
+#         'haha' : '😂',
+#         'wow'  : '😮',
+#         'sad'  : '😢',
+#         'angry': '😡',
+#         'like' : '👍',
+#     }
+#     data = [list(z) for z in zip(percentage_reactions.index, total_reactions, percentage_reactions)]
+#     # Create a pie chart
+#     pie_chart = (
+#         Pie(init_opts=opts.InitOpts(theme=ThemeType.LIGHT, width="1200px", height="400px"))
+#         .add(
+#             series_name="Reações",
+#             data_pair=[[emoji_labels.get(item[0], item[0]), item[1]] for item in data],
+#             radius=["40%", "75%"],
+#             label_opts=opts.LabelOpts(is_show=True, formatter="{b}: {d}%")
+#         )
+#         .set_global_opts(
+#             title_opts  = opts.TitleOpts(title="Porcentagem por Reações"),
+#             legend_opts = opts.LegendOpts(orient="vertical", pos_top="15%", pos_left="2%"),
+#         )
+#     )
+#     st_pyecharts(pie_chart)
 
 
 def page_fans_country_plot(page_fans_country, dates):
@@ -500,6 +540,11 @@ def page_fans_country_plot(page_fans_country, dates):
     )
     st.plotly_chart(fig)
 
+
+
+
+
+
 def page_fan_adds_remove(page_fan_adds, page_fan_removes, dates):
     options = {
         "title": {
@@ -509,13 +554,14 @@ def page_fan_adds_remove(page_fan_adds, page_fan_removes, dates):
             "trigger": "axis"
         },
         "legend": {
-            "data": ["Novos Seguidores", "Deixaram de Seguir"]
+            "data": ["Novos Seguidores", "Deixaram de Seguir"],
+            "show": False  # Disable legend
         },
         "grid": {
             "left": "3%",
             "right": "4%",
             "bottom": "3%",
-            "containLabel": True
+            "containLabel": False
         },
         "toolbox": {
             "feature": {
