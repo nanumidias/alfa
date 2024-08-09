@@ -39,42 +39,44 @@ def averageSessionDuration_continent(data):
                 "areaStyle": {}
             }]
         }
-        st_echarts(options=options, height="400px")
+        st_echarts(options=options, height="400px", width="1300px")
 
 
-def bounceRate_engagementRate_engagedSessions(data):
-        countries = data['country'].tolist()
-        bounce_rates = data['bounceRate'].tolist()
-        engagement_rates = data['engagementRate'].tolist()
-        engaged_sessions = data['engagedSessions'].tolist()
-        line = (
-            Line(init_opts=opts.InitOpts(width="1500px", height="500px"))
-            .add_xaxis(countries)
-            .add_yaxis("Taxa de Rejeição", bounce_rates, is_smooth=True, label_opts=opts.LabelOpts(is_show=False))
-            .add_yaxis("Taxa de Engajamento", engagement_rates, is_smooth=True, label_opts=opts.LabelOpts(is_show=False))
-            .add_yaxis("Sessões Engajadas", engaged_sessions, is_smooth=True, label_opts=opts.LabelOpts(is_show=False))
-            .set_global_opts(
-                title_opts=opts.TitleOpts(title=""),
-                tooltip_opts=opts.TooltipOpts(trigger="axis"),
-                xaxis_opts=opts.AxisOpts(type_="category", boundary_gap=False),
-                yaxis_opts=opts.AxisOpts(type_="value"),
-            )
-        )
-        line.set_series_opts(
-            label_opts=opts.LabelOpts(
-                position="left",
-                formatter=JsCode(
-                    "function(params){"
-                    "if(params.dataIndex == params.data.length - 1) {"
-                    "return params.seriesName;"
-                    "} else {"
-                    "return '';"
-                    "}"
-                    "}"
-                )
-            )
-        )
-        st_pyecharts(line)
+
+
+# def bounceRate_engagementRate_engagedSessions(data):
+#         countries = data['country'].tolist()
+#         bounce_rates = data['bounceRate'].tolist()
+#         engagement_rates = data['engagementRate'].tolist()
+#         engaged_sessions = data['engagedSessions'].tolist()
+#         line = (
+#             Line(init_opts=opts.InitOpts(width="1500px", height="500px"))
+#             .add_xaxis(countries)
+#             .add_yaxis("Taxa de Rejeição", bounce_rates, is_smooth=True, label_opts=opts.LabelOpts(is_show=False))
+#             .add_yaxis("Taxa de Engajamento", engagement_rates, is_smooth=True, label_opts=opts.LabelOpts(is_show=False))
+#             .add_yaxis("Sessões Engajadas", engaged_sessions, is_smooth=True, label_opts=opts.LabelOpts(is_show=False))
+#             .set_global_opts(
+#                 title_opts=opts.TitleOpts(title=""),
+#                 tooltip_opts=opts.TooltipOpts(trigger="axis"),
+#                 xaxis_opts=opts.AxisOpts(type_="category", boundary_gap=False),
+#                 yaxis_opts=opts.AxisOpts(type_="value"),
+#             )
+#         )
+#         line.set_series_opts(
+#             label_opts=opts.LabelOpts(
+#                 position="left",
+#                 formatter=JsCode(
+#                     "function(params){"
+#                     "if(params.dataIndex == params.data.length - 1) {"
+#                     "return params.seriesName;"
+#                     "} else {"
+#                     "return '';"
+#                     "}"
+#                     "}"
+#                 )
+#             )
+#         )
+#         st_pyecharts(line)
 
 
 def dauPerMau_wauPerMau(data):
@@ -187,114 +189,208 @@ def source_activeUsers(data):
     }
     st_echarts(options=options, height="400px", width="650px")
 
-# def source_activeUsers(data):
-#     aggregated_data = data.groupby('source').sum().reset_index()
-#     data_for_chart = [
-#         {"value": row['activeUsers'], "name": row['source']}
-#         for index, row in aggregated_data.iterrows()
-#     ]
-#     options = {
-#         "title": {
-#             "text": "",
-#             "left": "center"
-#         },
-#         "tooltip": {
-#             "trigger": "item"
-#         },
-#         # "legend": {
-#         #     # "orient": "horizontal",
-#         #     # "top": "top",
-#         # },
-#         "series": [
-#             {
-#                 "name": "Active Users",
-#                 "type": "pie",
-#                 "radius": ["30%", "75%"],
-#                 "center": ["50%", "60%"],
-#                 "roseType": "area",
-#                 "itemStyle": {
-#                     "borderRadius": 8
+
+
+
+# def eventName_eventCount_eventCountPerUser(data):
+#         events = data['eventName'].tolist()
+#         event_counts = data['eventCount'].tolist()
+#         event_counts_per_user = [round(float(x)) for x in data['eventCountPerUser'].tolist()]  # Convert to floats and round
+#         options = {
+#             "title": {
+#                 "text": " ",
+#                 "left": "center"
+#             },
+#             "tooltip": {
+#                 "trigger": "axis",
+#                 "axisPointer": {
+#                     "type": "shadow"
+#                 }
+#             },
+#             "legend": {
+#                 "data": ['Contagem de Eventos', 'Contagem de Eventos por Usuário'],
+#                 "top": "0%",  # Position the legend at the bottom
+#                 "padding": [0, 0, 0, 0] # Top, Right, Bottom, Left
+#             },
+#             "xAxis": {
+#                 "type": "category",
+#                 "data": events,
+#                 "axisTick": {
+#                     "alignWithLabel": True
 #                 },
-#                 "data": data_for_chart
-#             }
-#         ]
-#     }
-#     st_echarts(options=options, height="400px", width="650px")
+#                 "axisLabel": {
+#                     "interval": 0,
+#                     "rotate": 45,
+#                     "fontSize": 8  # Adjust the font size as needed
+#                 }
+#             },
+#             "yAxis": [
+#                 {
+#                     "type": "value",
+#                     "name": "Contagem de Eventos"
+#                 },
+#                 {
+#                     "type": "value",
+#                     "name": "Contagem de Eventos\n por Usuário",
+#                     "position": "right",
+#                     "alignTicks": True,
+#                     "axisLine": {
+#                         "show": True,
+#                         "lineStyle": {
+#                             "color": "#ff0000"
+#                         }
+#                     },
+#                     "axisLabel": {
+#                         "formatter": "{value}",
+#                     }
+#                 }
+#             ],
+#             "series": [
+#                 {
+#                     "name": "Contagem de Eventos",
+#                     "type": "bar",
+#                     "data": event_counts,
+#                     "barWidth": "40%"
+#                 },
+#                 {
+#                     "name": "Contagem de Eventos por Usuário",
+#                     "type": "bar",
+#                     "data": event_counts_per_user,
+#                     "yAxisIndex": 1,
+#                     "barWidth": "40%"
+#                 }
+#             ]
+#         }
+#         st_echarts(options=options, height="400px", width="650px")
+
+
+
+def eventName_eventCount_chart(data):
+    # Convert eventCount to numeric, forcing errors to NaN
+    data['eventCount'] = pd.to_numeric(data['eventCount'], errors='coerce')
+    
+    # Filter the data to include only those events with counts greater than 30
+    filtered_data = data[data['eventCount'] > 100]
+    
+    events = filtered_data['eventName'].tolist()
+    event_counts = filtered_data['eventCount'].tolist()
+    
+    options = {
+        "title": {
+            "text": " ",
+            "left": "center"
+        },
+        "tooltip": {
+            "trigger": "axis",
+            "axisPointer": {
+                "type": "shadow"
+            }
+        },
+        "legend": {
+            "data": ['Contagem de Eventos'],
+            "top": "0%",  # Position the legend at the top
+            "padding": [0, 0, 0, 0] # Top, Right, Bottom, Left
+        },
+        "xAxis": {
+            "type": "category",
+            "data": events,
+            "axisTick": {
+                "alignWithLabel": True
+            },
+            "axisLabel": {
+                "interval": 0,
+                "rotate": 0,
+                "fontSize": 10  # Adjust the font size as needed
+            }
+        },
+        "yAxis": {
+            "type": "value",
+            "name": "Contagem de Eventos"
+        },
+        "series": [
+            {
+                "name": "Contagem de Eventos",
+                "type": "bar",
+                "data": event_counts,
+                "barWidth": "40%"
+            }
+        ]
+    }
+    
+    st_echarts(options=options, height="400px", width="1300px")
+
+
+def eventName_eventCountPerUser_chart(data):
+    # Convert eventCountPerUser to numeric, forcing errors to NaN
+    data['eventCountPerUser'] = pd.to_numeric(data['eventCountPerUser'], errors='coerce')
+    
+    # Filter the data to include only those events with counts per user greater than 10
+    filtered_data = data[data['eventCountPerUser'] > 1]
+    
+    events = filtered_data['eventName'].tolist()
+    event_counts_per_user = [round(float(x)) for x in filtered_data['eventCountPerUser'].tolist()]  # Convert to floats and round
+    
+    options = {
+        "title": {
+            "text": " ",
+            "left": "center"
+        },
+        "tooltip": {
+            "trigger": "axis",
+            "axisPointer": {
+                "type": "shadow"
+            }
+        },
+        "legend": {
+            "data": ['Contagem de Eventos por Usuário'],
+            "top": "0%",  # Position the legend at the top
+            "padding": [0, 0, 0, 0] # Top, Right, Bottom, Left
+        },
+        "xAxis": {
+            "type": "category",
+            "data": events,
+            "axisTick": {
+                "alignWithLabel": True
+            },
+            "axisLabel": {
+                "interval": 1,
+                "rotate": 0,
+                "fontSize": 10  # Adjust the font size as needed
+            }
+        },
+        "yAxis": {
+            "type": "value",
+            "name": "Contagem de Eventos\n por Usuário",
+            "position": "left",
+            "alignTicks": True,
+            "axisLine": {
+                "show": True,
+                "lineStyle": {
+                    "color": "#ff0000"
+                }
+            },
+            "axisLabel": {
+                "formatter": "{value}",
+            }
+        },
+        "series": [
+            {
+                "name": "Contagem de Eventos por Usuário",
+                "type": "bar",
+                "data": event_counts_per_user,
+                "barWidth": "40%",
+            }
+        ]
+    }
+    st_echarts(options=options, height="400px", width="1300px")
 
 
 
 
-def eventName_eventCount_eventCountPerUser(data):
-        events = data['eventName'].tolist()
-        event_counts = data['eventCount'].tolist()
-        # event_counts_per_user = data['eventCountPerUser'].tolist()
-        event_counts_per_user = [round(float(x)) for x in data['eventCountPerUser'].tolist()]  # Convert to floats and round
-        options = {
-            "title": {
-                "text": " ",
-                "left": "center"
-            },
-            "tooltip": {
-                "trigger": "axis",
-                "axisPointer": {
-                    "type": "shadow"
-                }
-            },
-            "legend": {
-                "data": ['Contagem de Eventos', 'Contagem de Eventos por Usuário'],
-                "top": "0%",  # Position the legend at the bottom
-                "padding": [0, 0, 0, 0] # Top, Right, Bottom, Left
-            },
-            "xAxis": {
-                "type": "category",
-                "data": events,
-                "axisTick": {
-                    "alignWithLabel": True
-                },
-                "axisLabel": {
-                    "interval": 0,
-                    "rotate": 45,
-                    "fontSize": 8  # Adjust the font size as needed
-                }
-            },
-            "yAxis": [
-                {
-                    "type": "value",
-                    "name": "Contagem de Eventos"
-                },
-                {
-                    "type": "value",
-                    "name": "Contagem de Eventos\n por Usuário",
-                    "position": "right",
-                    "alignTicks": True,
-                    "axisLine": {
-                        "show": True,
-                        "lineStyle": {
-                            "color": "#ff0000"
-                        }
-                    },
-                    "axisLabel": {
-                        "formatter": "{value}",
-                    }
-                }
-            ],
-            "series": [
-                {
-                    "name": "Contagem de Eventos",
-                    "type": "bar",
-                    "data": event_counts,
-                    "barWidth": "40%"
-                },
-                {
-                    "name": "Contagem de Eventos por Usuário",
-                    "type": "bar",
-                    "data": event_counts_per_user,
-                    "yAxisIndex": 1,
-                    "barWidth": "40%"
-                }
-            ]
-        }
-        st_echarts(options=options, height="400px", width="650px")
+
+
+
+
 
 
 
@@ -380,17 +476,20 @@ def sessionSourceMedium_screenPageViews(data):
 
     st_echarts(options=options, height="300px", width="500px")
 
-def session_over_time(data):
-    dates                  = data['date'].tolist()
-    sessions               = data['sessions'].tolist()
-    engaged_sessions       = data['engagedSessions'].tolist()
-    # averageSessionDuration = data['averageSessionDuration'].tolist()
 
-    numeric_values = pd.to_numeric(data['averageSessionDuration'], errors='coerce')
-    averageSessionDuration = [round(value, 1) for value in numeric_values if not pd.isna(value)]
-    engagementRate         = data['engagementRate'].tolist()
-    bounceRate             = data['bounceRate'].tolist()
-    screenPageViews        = data['screenPageViews'].tolist()
+
+
+def session_over_time(data):   
+    dates                  = data['date'].tolist()
+    # Convert to numeric, coerce errors to NaN, then fill NaN with 0 or any default value
+    sessions               = pd.to_numeric(data['sessions'], errors='coerce').fillna(0).round(0).astype(int).tolist()
+    engaged_sessions       = pd.to_numeric(data['engagedSessions'], errors='coerce').fillna(0).round(0).astype(int).tolist()
+    numeric_values         = pd.to_numeric(data['averageSessionDuration'], errors='coerce').fillna(0)
+    averageSessionDuration = [round(value, 1) for value in numeric_values]
+    engagementRate         = pd.to_numeric(data['engagementRate'], errors='coerce').fillna(0).round(2).tolist()
+    bounceRate             = pd.to_numeric(data['bounceRate'], errors='coerce').fillna(0).round(2).tolist()
+    screenPageViews        = pd.to_numeric(data['screenPageViews'], errors='coerce').fillna(0).round(0).astype(int).tolist()
+
 
 
     options = {
@@ -443,7 +542,7 @@ def session_over_time(data):
             }
         ]
     }
-    st_echarts(options=options)
+    st_echarts(options=options, height="500px")
 
 
 

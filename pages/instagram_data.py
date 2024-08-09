@@ -25,7 +25,7 @@ if export_button:
 
 if instagram_user_id and access_token:
     try:
-        (dates,  ig_insights_by_total_values, 
+        (dates, start_date, end_date,  ig_insights_by_total_values, 
          impressions_values, reach_values, 
          profile_views_values, follower_count_values, 
          email_contacts, phone_call_clicks, 
@@ -34,19 +34,19 @@ if instagram_user_id and access_token:
         col1, col2, col3, col4 = st.columns([1,1,1,1])
         with col1:
             total_impressions = pd.DataFrame(impressions_values)
-            title = "Total de Impressões"
+            title = "Total de Impressões mensais"
             cards(title , total_impressions.sum()[0])
         with col2:
             total_page_reach = pd.DataFrame(reach_values)
-            title = "Alcance da Página"
+            title = "Alcance da Página mensal"
             cards(title , total_page_reach.sum()[0])
         with col3:
             total_profile_views = pd.DataFrame(profile_views_values)
-            title = "Visualizações de Perfil"
+            title = "Visualizações de Perfil mensais"
             cards(title , total_profile_views.sum()[0])
         with col4:
             total_followers_count = pd.DataFrame(follower_count_values)
-            title = "Seguidores"
+            title = "Seguidores mensais"
             cards(title , total_followers_count.sum()[0])
         st.divider()
         inst_page_impression_reach_profile_views(impressions_values, reach_values, profile_views_values, dates)

@@ -112,7 +112,6 @@ def facebook_api_data_load(page_id, start_date, end_date):
     page_fan_adds                         = [data["value"] for data in page_insights[16]["values"]]
     page_fan_removes                      = [data["value"] for data in page_insights[17]["values"]]
 
-
     return page_insights, dates, page_post_engagements, page_impressions, page_impressions_unique, page_fans, unique_page_fan, page_follows, page_views, page_negative_feedback_unique, page_impressions_viral, page_fan_adds_by_paid_non_paid_unique, page_daily_follows_unique, page_daily_unfollows_unique, page_impressions_by_age_gender_unique, page_impressions_organic_unique_v2, page_impressions_paid, post_reactions, page_fans_country, page_fan_adds, page_fan_removes
 
 
@@ -140,4 +139,4 @@ def instagram_data_load(instagram_user_id, access_token, start_date, end_date):
     website_clicks        = [data["value"] for data in ig_insights['data'][8]["values"]]
 
 
-    return dates,  ig_insights_by_total_values, impressions_values, reach_values, profile_views_values, follower_count_values, email_contacts, phone_call_clicks, text_message_clicks, get_directions_clicks, website_clicks
+    return dates, ig_insights_by_total_values, impressions_values, reach_values, profile_views_values, follower_count_values, email_contacts, phone_call_clicks, text_message_clicks, get_directions_clicks, website_clicks

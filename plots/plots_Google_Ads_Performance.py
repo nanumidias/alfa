@@ -19,8 +19,8 @@ def google_ads_impressions_clicks(data):
             "data": ['Ad Clicks', 'Impressão de Anúncio']
         },
         "grid": {
-            "left": "3%",
-            "right": "4%",
+            "left":   "15%",  # Adjust this to shift the graph to the right
+            "right":  "2%",   # You can adjust this as well if needed
             "bottom": "10%",
             "containLabel": True
         },
@@ -63,7 +63,7 @@ def google_ads_impressions_clicks(data):
             }
         ],
     }
-    st_echarts(options=option, height=500, width=800)
+    st_echarts(options=option, height=500, width=1300)
 
 
 def google_ads_cost_perclick(data):
