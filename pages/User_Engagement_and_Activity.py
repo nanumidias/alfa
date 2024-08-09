@@ -32,7 +32,7 @@ def user_engagement_activity(start_date, end_date):
 
 
 
-    col1, col2, col3 = st.columns([1,1,1,1])
+    col1, col2, col3 = st.columns([1,1,1])
     with col1:
         title = "Duração Média da Sessão"
         cards(title , round(data['averageSessionDuration'].nunique(), 2))  
