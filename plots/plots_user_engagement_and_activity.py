@@ -286,11 +286,13 @@ def eventName_eventCount_chart(data):
                 "type": "shadow"
             }
         },
-        "legend": {
-            "data": ['Contagem de Eventos'],
-            "top": "0%",  # Position the legend at the top
-            "padding": [0, 0, 0, 0] # Top, Right, Bottom, Left
-        },
+        # "legend": {
+        #     "data": ['Contagem de Eventos'],
+        #     "orient": "vertical",  # Set the legend orientation to vertical
+        #     "right": "0%",  # Position the legend outside the graph on the left
+        #     "top": "middle",  # Center the legend vertically
+        #     "padding": [0, 0, 0, 0]  # Add padding to push it outside the graph boundary
+        # },
         "xAxis": {
             "type": "category",
             "data": events,
@@ -312,7 +314,13 @@ def eventName_eventCount_chart(data):
                 "name": "Contagem de Eventos",
                 "type": "bar",
                 "data": event_counts,
-                "barWidth": "40%"
+                "barWidth": "40%",
+                "label": {
+                    "show": True,
+                    "position": "top",  # Display the values on top of the bars
+                    "fontSize": 10,  # Adjust the font size as needed
+                    "color": "black"  # Adjust the color of the labels
+                }
             }
         ]
     }
