@@ -165,7 +165,7 @@ def eventName_eventCount_chart(data):
     
     # events = filtered_data['eventName'].tolist()
 
-    events = [event for event in filtered_data['eventName'].tolist() if event != "formulário_Site" and "Formulário_Site" not in event]
+    events = [event for event in filtered_data['eventName'].tolist() if event != "formulário_Site"]
     event_counts = filtered_data['eventCount'].tolist()
     
     options = {
@@ -229,7 +229,7 @@ def eventName_eventCountPerUser_chart(data):
     filtered_data = data[data['eventCountPerUser'] > 1]
     
     # events = filtered_data['eventName'].tolist()
-    events = [event for event in filtered_data['eventName'].tolist() if event != "formulário_Site" and "Formulário_Site" not in event]
+    events = [event for event in filtered_data['eventName'].tolist() if event != "formulário_Site"]
 
     event_counts_per_user = [round(float(x)) for x in filtered_data['eventCountPerUser'].tolist()]  # Convert to floats and round
     
