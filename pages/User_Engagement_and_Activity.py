@@ -64,7 +64,9 @@ def user_engagement_activity(start_date, end_date):
         screenPageViews_operatingSystem(data)
     with col2:
         sessionSourceMedium_screenPageViews(data)
-    session_over_time(data)
+    # session_over_time(data)
+    session_over_time_1(data)
+    session_over_time_2(data)
     st.divider()
     session_over_dayOfWeeks(data)
     col1, col2 = st.columns([1,1])

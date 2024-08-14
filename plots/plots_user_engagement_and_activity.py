@@ -43,42 +43,6 @@ def averageSessionDuration_continent(data):
 
 
 
-
-# def bounceRate_engagementRate_engagedSessions(data):
-#         countries = data['country'].tolist()
-#         bounce_rates = data['bounceRate'].tolist()
-#         engagement_rates = data['engagementRate'].tolist()
-#         engaged_sessions = data['engagedSessions'].tolist()
-#         line = (
-#             Line(init_opts=opts.InitOpts(width="1500px", height="500px"))
-#             .add_xaxis(countries)
-#             .add_yaxis("Taxa de Rejeição", bounce_rates, is_smooth=True, label_opts=opts.LabelOpts(is_show=False))
-#             .add_yaxis("Taxa de Engajamento", engagement_rates, is_smooth=True, label_opts=opts.LabelOpts(is_show=False))
-#             .add_yaxis("Sessões Engajadas", engaged_sessions, is_smooth=True, label_opts=opts.LabelOpts(is_show=False))
-#             .set_global_opts(
-#                 title_opts=opts.TitleOpts(title=""),
-#                 tooltip_opts=opts.TooltipOpts(trigger="axis"),
-#                 xaxis_opts=opts.AxisOpts(type_="category", boundary_gap=False),
-#                 yaxis_opts=opts.AxisOpts(type_="value"),
-#             )
-#         )
-#         line.set_series_opts(
-#             label_opts=opts.LabelOpts(
-#                 position="left",
-#                 formatter=JsCode(
-#                     "function(params){"
-#                     "if(params.dataIndex == params.data.length - 1) {"
-#                     "return params.seriesName;"
-#                     "} else {"
-#                     "return '';"
-#                     "}"
-#                     "}"
-#                 )
-#             )
-#         )
-#         st_pyecharts(line)
-
-
 def dauPerMau_wauPerMau(data):
     data['dauPerMau']       = data['dauPerMau'].astype(float)
     data['wauPerMau']       = data['wauPerMau'].astype(float)
@@ -192,87 +156,16 @@ def source_activeUsers(data):
 
 
 
-# def eventName_eventCount_eventCountPerUser(data):
-#         events = data['eventName'].tolist()
-#         event_counts = data['eventCount'].tolist()
-#         event_counts_per_user = [round(float(x)) for x in data['eventCountPerUser'].tolist()]  # Convert to floats and round
-#         options = {
-#             "title": {
-#                 "text": " ",
-#                 "left": "center"
-#             },
-#             "tooltip": {
-#                 "trigger": "axis",
-#                 "axisPointer": {
-#                     "type": "shadow"
-#                 }
-#             },
-#             "legend": {
-#                 "data": ['Contagem de Eventos', 'Contagem de Eventos por Usuário'],
-#                 "top": "0%",  # Position the legend at the bottom
-#                 "padding": [0, 0, 0, 0] # Top, Right, Bottom, Left
-#             },
-#             "xAxis": {
-#                 "type": "category",
-#                 "data": events,
-#                 "axisTick": {
-#                     "alignWithLabel": True
-#                 },
-#                 "axisLabel": {
-#                     "interval": 0,
-#                     "rotate": 45,
-#                     "fontSize": 8  # Adjust the font size as needed
-#                 }
-#             },
-#             "yAxis": [
-#                 {
-#                     "type": "value",
-#                     "name": "Contagem de Eventos"
-#                 },
-#                 {
-#                     "type": "value",
-#                     "name": "Contagem de Eventos\n por Usuário",
-#                     "position": "right",
-#                     "alignTicks": True,
-#                     "axisLine": {
-#                         "show": True,
-#                         "lineStyle": {
-#                             "color": "#ff0000"
-#                         }
-#                     },
-#                     "axisLabel": {
-#                         "formatter": "{value}",
-#                     }
-#                 }
-#             ],
-#             "series": [
-#                 {
-#                     "name": "Contagem de Eventos",
-#                     "type": "bar",
-#                     "data": event_counts,
-#                     "barWidth": "40%"
-#                 },
-#                 {
-#                     "name": "Contagem de Eventos por Usuário",
-#                     "type": "bar",
-#                     "data": event_counts_per_user,
-#                     "yAxisIndex": 1,
-#                     "barWidth": "40%"
-#                 }
-#             ]
-#         }
-#         st_echarts(options=options, height="400px", width="650px")
-
-
-
 def eventName_eventCount_chart(data):
     # Convert eventCount to numeric, forcing errors to NaN
     data['eventCount'] = pd.to_numeric(data['eventCount'], errors='coerce')
     
     # Filter the data to include only those events with counts greater than 30
-    filtered_data = data[data['eventCount'] > 100]
+    filtered_data = data[data['eventCount'] > 20]
     
-    events = filtered_data['eventName'].tolist()
+    # events = filtered_data['eventName'].tolist()
+
+    events = [event for event in filtered_data['eventName'].tolist() if event != "formulário_Site" and "Formulário_Site" not in event]
     event_counts = filtered_data['eventCount'].tolist()
     
     options = {
@@ -335,7 +228,9 @@ def eventName_eventCountPerUser_chart(data):
     # Filter the data to include only those events with counts per user greater than 10
     filtered_data = data[data['eventCountPerUser'] > 1]
     
-    events = filtered_data['eventName'].tolist()
+    # events = filtered_data['eventName'].tolist()
+    events = [event for event in filtered_data['eventName'].tolist() if event != "formulário_Site" and "Formulário_Site" not in event]
+
     event_counts_per_user = [round(float(x)) for x in filtered_data['eventCountPerUser'].tolist()]  # Convert to floats and round
     
     options = {
@@ -387,6 +282,12 @@ def eventName_eventCountPerUser_chart(data):
                 "type": "bar",
                 "data": event_counts_per_user,
                 "barWidth": "40%",
+               "label": {
+                    "show": True,
+                    "position": "top",  # Display the values on top of the bars
+                    "fontSize": 10,  # Adjust the font size as needed
+                    "color": "black"  # Adjust the color of the labels
+                }
             }
         ]
     }
@@ -408,7 +309,11 @@ def screenPageViews_operatingSystem(data):
         bar = (
             Bar(init_opts=opts.InitOpts(width="600px", height="400px"))
             .add_xaxis(unique_operating_systems.tolist())
-            .add_yaxis("Screen Page Views", unique_screen_page_views.tolist(), label_opts=opts.LabelOpts(is_show=False))
+            .add_yaxis(
+                "Screen Page Views", 
+                unique_screen_page_views.tolist(), 
+                label_opts=opts.LabelOpts(is_show=True, position="top")  # Display numbers on top of each bar
+            )
             .set_global_opts(
                 title_opts=opts.TitleOpts(title=" ", subtitle="Comparação de Diferentes Navegadores"),
                 toolbox_opts=opts.ToolboxOpts(),
@@ -485,19 +390,16 @@ def sessionSourceMedium_screenPageViews(data):
     st_echarts(options=options, height="300px", width="500px")
 
 
+def session_over_time_1(data):
+    # Ensure dates are unique and sorted
+    data = data.sort_values(by='date').drop_duplicates(subset='date', keep='first')
 
-
-def session_over_time(data):   
     dates                  = data['date'].tolist()
     # Convert to numeric, coerce errors to NaN, then fill NaN with 0 or any default value
     sessions               = pd.to_numeric(data['sessions'], errors='coerce').fillna(0).round(0).astype(int).tolist()
     engaged_sessions       = pd.to_numeric(data['engagedSessions'], errors='coerce').fillna(0).round(0).astype(int).tolist()
     numeric_values         = pd.to_numeric(data['averageSessionDuration'], errors='coerce').fillna(0)
     averageSessionDuration = [round(value, 1) for value in numeric_values]
-    engagementRate         = pd.to_numeric(data['engagementRate'], errors='coerce').fillna(0).round(2).tolist()
-    bounceRate             = pd.to_numeric(data['bounceRate'], errors='coerce').fillna(0).round(2).tolist()
-    screenPageViews        = pd.to_numeric(data['screenPageViews'], errors='coerce').fillna(0).round(0).astype(int).tolist()
-
 
 
     options = {
@@ -505,10 +407,13 @@ def session_over_time(data):
             "text": ""
         },
         "tooltip": {
-            "trigger": "axis"
+            "trigger": "axis",
+            "axisPointer": {
+                "type": "shadow"  # Use shadow to make it appropriate for stacked bars
+            }
         },
         "legend": {
-            "data": ["Sessões", "Sessões Engajadas", "Avg Session Duration", "Taxa de Engajamento", "Taxa de Rejeição", "Visualizações de Páginas/Telas"]
+            "data": ["Sessões", "Sessões Engajadas", "Avg Session Duration"]
         },
         "xAxis": {
             "type": "category",
@@ -520,37 +425,231 @@ def session_over_time(data):
         "series": [
             {
                 "name": "Sessões",
-                "type": "line",
+                "type": "bar",
+                "stack": "total",
                 "data": sessions
             },
             {
                 "name": "Sessões Engajadas",
-                "type": "line",
+                "type": "bar",
+                "stack": "total",
                 "data": engaged_sessions
             },
             {
                 "name": "Avg Session Duration",
-                "type": "line",
+                "type": "bar",
+                "stack": "total",
                 "data": averageSessionDuration
-            },
-            {
-                "name": "Taxa de Engajamento",
-                "type": "line",
-                "data": engagementRate
-            },
-            {
-                "name": "Taxa de Rejeição",
-                "type": "line",
-                "data": bounceRate
-            },
-            {
-                "name": "Visualizações de Páginas/Telas",
-                "type": "line",
-                "data": screenPageViews
             }
         ]
     }
     st_echarts(options=options, height="500px")
+
+
+def session_over_time_2(data):
+    # Ensure dates are unique and sorted
+    data = data.sort_values(by='date').drop_duplicates(subset='date', keep='first')
+
+    dates                  = data['date'].tolist()
+    # Convert to numeric, coerce errors to NaN, then fill NaN with 0 or any default value
+    engagementRate         = pd.to_numeric(data['engagementRate'], errors='coerce').fillna(0).round(2).tolist()
+    bounceRate             = pd.to_numeric(data['bounceRate'], errors='coerce').fillna(0).round(2).tolist()
+    screenPageViews        = pd.to_numeric(data['screenPageViews'], errors='coerce').fillna(0).round(0).astype(int).tolist()
+
+    options = {
+        "title": {
+            "text": ""
+        },
+        "tooltip": {
+            "trigger": "axis",
+            "axisPointer": {
+                "type": "shadow"  # Use shadow to make it appropriate for stacked bars
+            }
+        },
+        "legend": {
+            "data": ["Taxa de Engajamento", "Taxa de Rejeição", "Visualizações de Páginas/Telas"]
+        },
+        "xAxis": {
+            "type": "category",
+            "data": dates
+        },
+        "yAxis": {
+            "type": "value"
+        },
+        "series": [
+            {
+                "name": "Taxa de Engajamento",
+                "type": "bar",
+                "stack": "total",
+                "data": engagementRate,
+                "itemStyle": {
+                    "color": "6f000f"
+                }
+            },
+            {
+                "name": "Taxa de Rejeição",
+                "type": "bar",
+                "stack": "total",
+                "data": bounceRate,
+                "itemStyle": {
+                    "color": "#a50b5e"
+                }
+            },
+            {
+                "name": "Visualizações de Páginas/Telas",
+                "type": "bar",
+                "stack": "total",
+                "data": screenPageViews,
+                "itemStyle": {
+                    "color": "#2ca02c"  # Green
+                }
+            }
+        ]
+    }
+    st_echarts(options=options, height="500px")
+
+
+
+# def session_over_time(data):
+#     # Ensure dates are unique and sorted
+#     data = data.sort_values(by='date').drop_duplicates(subset='date', keep='first')
+
+#     dates                  = data['date'].tolist()
+#     # Convert to numeric, coerce errors to NaN, then fill NaN with 0 or any default value
+#     sessions               = pd.to_numeric(data['sessions'], errors='coerce').fillna(0).round(0).astype(int).tolist()
+#     engaged_sessions       = pd.to_numeric(data['engagedSessions'], errors='coerce').fillna(0).round(0).astype(int).tolist()
+#     numeric_values         = pd.to_numeric(data['averageSessionDuration'], errors='coerce').fillna(0)
+#     averageSessionDuration = [round(value, 1) for value in numeric_values]
+#     engagementRate         = pd.to_numeric(data['engagementRate'], errors='coerce').fillna(0).round(2).tolist()
+#     bounceRate             = pd.to_numeric(data['bounceRate'], errors='coerce').fillna(0).round(2).tolist()
+#     screenPageViews        = pd.to_numeric(data['screenPageViews'], errors='coerce').fillna(0).round(0).astype(int).tolist()
+
+#     options = {
+#         "title": {
+#             "text": ""
+#         },
+#         "tooltip": {
+#             "trigger": "axis",
+#             "axisPointer": {
+#                 "type": "shadow"  # Use shadow to make it appropriate for stacked bars
+#             }
+#         },
+#         "legend": {
+#             "data": ["Sessões", "Sessões Engajadas", "Avg Session Duration", "Taxa de Engajamento", "Taxa de Rejeição", "Visualizações de Páginas/Telas"]
+#         },
+#         "xAxis": {
+#             "type": "category",
+#             "data": dates
+#         },
+#         "yAxis": {
+#             "type": "value"
+#         },
+#         "series": [
+#             {
+#                 "name": "Sessões",
+#                 "type": "bar",
+#                 "stack": "total",
+#                 "data": sessions
+#             },
+#             {
+#                 "name": "Sessões Engajadas",
+#                 "type": "bar",
+#                 "stack": "total",
+#                 "data": engaged_sessions
+#             },
+#             {
+#                 "name": "Avg Session Duration",
+#                 "type": "bar",
+#                 "stack": "total",
+#                 "data": averageSessionDuration
+#             },
+#             {
+#                 "name": "Taxa de Engajamento",
+#                 "type": "bar",
+#                 "stack": "total",
+#                 "data": engagementRate
+#             },
+#             {
+#                 "name": "Taxa de Rejeição",
+#                 "type": "bar",
+#                 "stack": "total",
+#                 "data": bounceRate
+#             },
+#             {
+#                 "name": "Visualizações de Páginas/Telas",
+#                 "type": "bar",
+#                 "stack": "total",
+#                 "data": screenPageViews
+#             }
+#         ]
+#     }
+#     st_echarts(options=options, height="500px")
+
+
+# def session_over_time(data):
+#     dates                  = data['date'].tolist()
+#     # Convert to numeric, coerce errors to NaN, then fill NaN with 0 or any default value
+#     sessions               = pd.to_numeric(data['sessions'], errors='coerce').fillna(0).round(0).astype(int).tolist()
+#     engaged_sessions       = pd.to_numeric(data['engagedSessions'], errors='coerce').fillna(0).round(0).astype(int).tolist()
+#     numeric_values         = pd.to_numeric(data['averageSessionDuration'], errors='coerce').fillna(0)
+#     averageSessionDuration = [round(value, 1) for value in numeric_values]
+#     engagementRate         = pd.to_numeric(data['engagementRate'], errors='coerce').fillna(0).round(2).tolist()
+#     bounceRate             = pd.to_numeric(data['bounceRate'], errors='coerce').fillna(0).round(2).tolist()
+#     screenPageViews        = pd.to_numeric(data['screenPageViews'], errors='coerce').fillna(0).round(0).astype(int).tolist()
+
+
+
+#     options = {
+#         "title": {
+#             "text": ""
+#         },
+#         "tooltip": {
+#             "trigger": "axis"
+#         },
+#         "legend": {
+#             "data": ["Sessões", "Sessões Engajadas", "Avg Session Duration", "Taxa de Engajamento", "Taxa de Rejeição", "Visualizações de Páginas/Telas"]
+#         },
+#         "xAxis": {
+#             "type": "category",
+#             "data": dates
+#         },
+#         "yAxis": {
+#             "type": "value"
+#         },
+#         "series": [
+#             {
+#                 "name": "Sessões",
+#                 "type": "line",
+#                 "data": sessions
+#             },
+#             {
+#                 "name": "Sessões Engajadas",
+#                 "type": "line",
+#                 "data": engaged_sessions
+#             },
+#             {
+#                 "name": "Avg Session Duration",
+#                 "type": "line",
+#                 "data": averageSessionDuration
+#             },
+#             {
+#                 "name": "Taxa de Engajamento",
+#                 "type": "line",
+#                 "data": engagementRate
+#             },
+#             {
+#                 "name": "Taxa de Rejeição",
+#                 "type": "line",
+#                 "data": bounceRate
+#             },
+#             {
+#                 "name": "Visualizações de Páginas/Telas",
+#                 "type": "line",
+#                 "data": screenPageViews
+#             }
+#         ]
+#     }
+#     st_echarts(options=options, height="500px")
 
 
 
@@ -560,13 +659,10 @@ def session_over_time(data):
 def session_over_dayOfWeeks(data):
     data['sessions'] = pd.to_numeric(data['sessions'])
     data['engagedSessions'] = pd.to_numeric(data['engagedSessions'])
-    # data['averageSessionDuration'] = pd.to_numeric(data['averageSessionDuration'])
-    # data['engagementRate'] = pd.to_numeric(data['engagementRate'])
-    # data['bounceRate'] = pd.to_numeric(data['bounceRate'])
 
     # Assuming data is your DataFrame
-    data['averageSessionDuration'] = data['averageSessionDuration'].astype(float).round(2)
-    data['engagementRate'] = data['engagementRate'].astype(float).round(2)
+    data['averageSessionDuration'] = data['averageSessionDuration'].astype(float).round(0)
+    data['engagementRate'] = data['engagementRate'].astype(float).round(0)
     data['bounceRate'] = data['bounceRate'].astype(float).round(2)
 
     data['screenPageViews'] = pd.to_numeric(data['screenPageViews'])
@@ -580,13 +676,9 @@ def session_over_dayOfWeeks(data):
     
     sessions = data.groupby('dayOfWeek')['sessions'].sum().reindex(days).tolist()
     engagedSessions = data.groupby('dayOfWeek')['engagedSessions'].sum().reindex(days).tolist()
-    # averageSessionDuration = data.groupby('dayOfWeek')['averageSessionDuration'].mean().reindex(days).tolist()
-    # engagementRate = data.groupby('dayOfWeek')['engagementRate'].mean().reindex(days).tolist()
-    # bounceRate = data.groupby('dayOfWeek')['bounceRate'].mean().reindex(days).tolist()
-    # Group by 'dayOfWeek' and calculate the mean for each metric, then reindex and round to 2 decimal places
-    averageSessionDuration = data.groupby('dayOfWeek')['averageSessionDuration'].mean().reindex(days).round(2).tolist()
-    engagementRate = data.groupby('dayOfWeek')['engagementRate'].mean().reindex(days).round(2).tolist()
-    bounceRate = data.groupby('dayOfWeek')['bounceRate'].mean().reindex(days).round(2).tolist()
+    averageSessionDuration = data.groupby('dayOfWeek')['averageSessionDuration'].mean().reindex(days).round(0).tolist()
+    engagementRate = data.groupby('dayOfWeek')['engagementRate'].mean().reindex(days).round(0).tolist()
+    bounceRate = data.groupby('dayOfWeek')['bounceRate'].mean().reindex(days).round(0).tolist()
 
     screenPageViews = data.groupby('dayOfWeek')['screenPageViews'].sum().reindex(days).tolist()
     eventCount = data.groupby('dayOfWeek')['eventCount'].sum().reindex(days).tolist()
@@ -677,126 +769,6 @@ def session_over_dayOfWeeks(data):
     }
     st_echarts(options=options, height="400px", width="950px")
 
-
-
-
-
-
-# def session_over_dayOfWeeks(data):
-#     data['sessions'] = pd.to_numeric(data['sessions'])
-#     data['engagedSessions'] = pd.to_numeric(data['engagedSessions'])
-#     data['averageSessionDuration'] = pd.to_numeric(data['averageSessionDuration'])
-#     data['engagementRate'] = pd.to_numeric(data['engagementRate'])
-#     data['bounceRate'] = pd.to_numeric(data['bounceRate'])
-#     data['screenPageViews'] = pd.to_numeric(data['screenPageViews'])
-#     data['eventCount'] = pd.to_numeric(data['eventCount'])
-#     days = sorted(data['dayOfWeek'].unique().tolist())
-#     sessions = data.groupby('dayOfWeek')['sessions'].sum().reindex(days).tolist()
-#     engagedSessions = data.groupby('dayOfWeek')['engagedSessions'].sum().reindex(days).tolist()
-#     averageSessionDuration = data.groupby('dayOfWeek')['averageSessionDuration'].mean().reindex(days).tolist()
-#     engagementRate = data.groupby('dayOfWeek')['engagementRate'].mean().reindex(days).tolist()
-#     bounceRate = data.groupby('dayOfWeek')['bounceRate'].mean().reindex(days).tolist()
-#     screenPageViews = data.groupby('dayOfWeek')['screenPageViews'].sum().reindex(days).tolist()
-#     eventCount = data.groupby('dayOfWeek')['eventCount'].sum().reindex(days).tolist()
-
-
-
-#     # # Dictionary for mapping English days to Portuguese days
-#     # day_mapping = {
-#     #     'Wednesday': 'Quarta-feira',
-#     #     'Tuesday': 'Terça-feira',
-#     #     'Thursday': 'Quinta-feira',
-#     #     'Saturday': 'Sábado',
-#     #     'Sunday': 'Domingo',
-#     #     'Monday': 'Segunda-feira',
-#     #     'Friday': 'Sexta-feira'
-#     # }
-#     # Dictionary for mapping English days to Portuguese days
-#     day_mapping = {
-#         'Monday': 'Segunda-feira',
-#         'Tuesday': 'Terça-feira',
-#         'Wednesday': 'Quarta-feira',
-#         'Thursday': 'Quinta-feira',
-#         'Friday': 'Sexta-feira',
-#         'Saturday': 'Sábado',
-#         'Sunday': 'Domingo'
-#     }
-
-#     translated_days = [day_mapping[day] for day in days]
-
-
-#     options = {
-#         "title": {
-#             "subtext": "Sessões ao Longo dos Dias da Semana"
-#         },
-#         "tooltip": {
-#             "trigger": "axis"
-#         },
-#         "legend": {
-#             "data": ["Sessões", "Sessões Engajadas", "Avg Session Duration", 
-#                      "Taxa de Engajamento", "Taxa de Rejeição", "Visualizações de Páginas/Telas", 
-#                      "Contagem de Eventos"],
-#             "orient": "horizontal",
-#             "bottom": 0
-#         },
-#         "grid": {
-#             "left": "3%",
-#             "right": "4%",
-#             "containLabel": True
-#         },
-#         "xAxis": {
-#             "type": "value"
-#         },
-#         "yAxis": {
-#             "type": "category",
-#             "data": translated_days
-#         },
-#         "series": [
-#             {
-#                 "name": "Sessões",
-#                 "type": "bar",
-#                 "stack": "total",
-#                 "data": sessions
-#             },
-#             {
-#                 "name": "Sessões Engajadas",
-#                 "type": "bar",
-#                 "stack": "total",
-#                 "data": engagedSessions
-#             },
-#             {
-#                 "name": "Avg Session Duration",
-#                 "type": "bar",
-#                 "stack": "total",
-#                 "data": averageSessionDuration
-#             },
-#             {
-#                 "name": "Taxa de Engajamento",
-#                 "type": "bar",
-#                 "stack": "total",
-#                 "data": engagementRate
-#             },
-#             {
-#                 "name": "Taxa de Rejeição",
-#                 "type": "bar",
-#                 "stack": "total",
-#                 "data": bounceRate
-#             },
-#             {
-#                 "name": "Visualizações de Páginas/Telas",
-#                 "type": "bar",
-#                 "stack": "total",
-#                 "data": screenPageViews
-#             },
-#             {
-#                 "name": "Contagem de Eventos",
-#                 "type": "bar",
-#                 "stack": "total",
-#                 "data": eventCount
-#             }
-#         ]
-#     }
-#     st_echarts(options=options)
 
 def session_over_OS_Device_Browser(data):
     fig = px.sunburst(
