@@ -1,13 +1,29 @@
 import pandas as pd
 from streamlit_echarts import st_echarts
-
+import streamlit as st
 
 def google_ads_impressions_clicks(data):
     df = pd.DataFrame(data)
     df_unique = df.drop_duplicates(subset=["campaignName"])
-    campaigns = df_unique["campaignName"].tolist()
+
+    # Extract the last part of the campaign names after the last " - "
+    df_unique["shortCampaignName"] = df_unique["campaignName"].apply(lambda x: x.split(" - ")[-1])
+    campaigns = df_unique["shortCampaignName"].tolist()
+
+    # campaigns = df_unique["campaignName"].tolist()
+
     clicks = df_unique["advertiserAdClicks"].tolist()
     impressions = df_unique["advertiserAdImpressions"].tolist()
+
+
+    df = pd.DataFrame(data)
+    df_unique = df.drop_duplicates(subset=["campaignName"])
+    # Extract the last part of the campaign names after the last " - "
+    df_unique["shortCampaignName"] = df_unique["campaignName"].apply(lambda x: x.split(" - ")[-1])
+    campaigns = df_unique["shortCampaignName"].tolist()
+
+
+
     option = {
         "tooltip": {
             "trigger": 'axis',
@@ -19,9 +35,9 @@ def google_ads_impressions_clicks(data):
             "data": ['Ad Clicks', 'Impressão de Anúncio']
         },
         "grid": {
-            "left":   "15%",  # Adjust this to shift the graph to the right
-            "right":  "2%",   # You can adjust this as well if needed
-            "bottom": "10%",
+            "left":   "0%",  # Adjust this to shift the graph to the right
+            "right":  "10%",   # You can adjust this as well if needed
+            "bottom": "0%",
             "containLabel": True
         },
         "xAxis": {
@@ -31,7 +47,7 @@ def google_ads_impressions_clicks(data):
             "axisLabel": {
                 "interval": 0,
                 "rotate": 45,
-                "fontSize": 8,
+                "fontSize": 12,
                 "formatter": '{value}'
             },
         },
@@ -48,6 +64,11 @@ def google_ads_impressions_clicks(data):
                 },
                 "lineStyle": {
                     "color": 'red'
+                },
+                "label": {
+                    "show": True,
+                    "position": 'top',  # Position the label at the top of each point
+                    "color": 'red'      # Set the color of the label
                 }
             },
             {
@@ -59,11 +80,79 @@ def google_ads_impressions_clicks(data):
                 },
                 "lineStyle": {
                     "color": 'green'
+                },
+                "label": {
+                    "show": True,
+                    "position": 'top',  # Position the label at the top of each point
+                    "color": 'green'      # Set the color of the label
                 }
             }
         ],
     }
-    st_echarts(options=option, height=500, width=1300)
+    st_echarts(options=option, height=400, width=1400)
+
+# def google_ads_impressions_clicks(data):
+#     df = pd.DataFrame(data)
+#     df_unique = df.drop_duplicates(subset=["campaignName"])
+#     campaigns = df_unique["campaignName"].tolist()
+#     clicks = df_unique["advertiserAdClicks"].tolist()
+#     impressions = df_unique["advertiserAdImpressions"].tolist()
+#     option = {
+#         "tooltip": {
+#             "trigger": 'axis',
+#             "axisPointer": {
+#                 "type": 'cross'
+#             }
+#         },
+#         "legend": {
+#             "data": ['Ad Clicks', 'Impressão de Anúncio']
+#         },
+#         "grid": {
+#             "left":   "15%",  # Adjust this to shift the graph to the right
+#             "right":  "2%",   # You can adjust this as well if needed
+#             "bottom": "10%",
+#             "containLabel": True
+#         },
+#         "xAxis": {
+#             "type": 'category',
+#             "boundaryGap": False,
+#             "data": campaigns,
+#             "axisLabel": {
+#                 "interval": 0,
+#                 "rotate": 45,
+#                 "fontSize": 8,
+#                 "formatter": '{value}'
+#             },
+#         },
+#         "yAxis": {
+#             "type": 'value'
+#         },
+#         "series": [
+#             {
+#                 "name": 'Ad Clicks',
+#                 "type": 'line',
+#                 "data": clicks,
+#                 "itemStyle": {
+#                     "color": 'red'
+#                 },
+#                 "lineStyle": {
+#                     "color": 'red'
+#                 }
+#             },
+#             {
+#                 "name": 'Impressão de Anúncio',
+#                 "type": 'line',
+#                 "data": impressions,
+#                 "itemStyle": {
+#                     "color": 'green'
+#                 },
+#                 "lineStyle": {
+#                     "color": 'green'
+#                 }
+#             }
+#         ],
+#     }
+#     st_echarts(options=option, height=500, width=1300)
 
 
 def google_ads_cost_perclick(data):
