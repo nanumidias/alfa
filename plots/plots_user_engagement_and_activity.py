@@ -483,7 +483,7 @@ def session_over_time_2(data):
                 "stack": "total",
                 "data": engagementRate,
                 "itemStyle": {
-                    "color": "6f000f"
+                    "color": "#04993c"
                 }
             },
             {
@@ -492,7 +492,7 @@ def session_over_time_2(data):
                 "stack": "total",
                 "data": bounceRate,
                 "itemStyle": {
-                    "color": "#a50b5e"
+                    "color": "#c2b519"
                 }
             },
             {
@@ -501,7 +501,7 @@ def session_over_time_2(data):
                 "stack": "total",
                 "data": screenPageViews,
                 "itemStyle": {
-                    "color": "#2ca02c"  # Green
+                    "color": "#1a0e90"  # Green
                 }
             }
         ]
