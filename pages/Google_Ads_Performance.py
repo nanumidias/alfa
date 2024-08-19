@@ -28,13 +28,14 @@ try:
     data       = pd.DataFrame(data_)
     total_data = pd.DataFrame(total_data_)
     
-    data['date']      = pd.to_datetime(data['date'], format='%Y%m%d')
-    data['date']      = data['date'].dt.strftime('%Y-%m-%d')
-    data['dayOfWeek'] = pd.to_datetime(data['date']).dt.day_name()
-    data['month']     = pd.to_datetime(data['date']).dt.month_name()
-    total_compaigns        = data['campaignName'].nunique()
-    returnOnAdSpend_Values = data['returnOnAdSpend']
-    col1, col2, col3, col4, col5 = st.columns([1,1,1,1,1])
+    data['date']                 = pd.to_datetime(data['date'], format='%Y%m%d')
+    data['date']                 = data['date'].dt.strftime('%Y-%m-%d')
+    data['dayOfWeek']            = pd.to_datetime(data['date']).dt.day_name()
+    data['month']                = pd.to_datetime(data['date']).dt.month_name()
+    total_compaigns              = data['campaignName'].nunique()
+    returnOnAdSpend_Values       = data['returnOnAdSpend']
+    total_ads_spent              = data['advertiserAdCost']
+    col1, col2, col3, col4, col5, col6 = st.columns([1,1,1,1,1,1])
     with col1:
         title = "Total de Usuários"
         cards(title , int(total_data['totalUsers'].nunique()))
@@ -42,23 +43,33 @@ try:
         title = "Total de Campanhas"
         cards(title , total_compaigns)
     with col3:
+        title = "Total Ads Spent R$"
+        total_ads_spent_clean = pd.to_numeric(total_ads_spent, errors='coerce').fillna(0)
+        cards(title , int(total_ads_spent_clean.sum()))
+    with col4:
         title = "Retorno sobre Investimento em Anúncios"
         cards(title , int(returnOnAdSpend_Values.sum()))
-    with col4:
+    with col5:
         title = "Receita Total"
         cards(title , int(total_data['totalRevenue'].nunique()))
-    with col5:
+    with col6:
         title = "Receita Média por Compra"
         cards(title , int(total_data['averagePurchaseRevenue'].nunique()))    
     st.divider()
     google_ads_impressions_clicks(data)
     google_ads_cost_perclick(data)
     st.divider()
-    col1, col2 = st.columns([1,1])
-    with col1:
-        advertiserAdCostPerClick(data)
-    with col2:
-        returnOnAdSpend(data)
+
+    google_ads_spent(data)
+
+    st.divider()
+    advertiserAdCostPerClick(data)
+    returnOnAdSpend(data)
+    # col1, col2 = st.columns([1,1])
+    # with col1:
+    #     advertiserAdCostPerClick(data)
+    # with col2:
+    #     returnOnAdSpend(data)
 except Exception as e:
     st.error(f"Error fetching data: {e}")
 

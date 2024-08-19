@@ -325,7 +325,7 @@ def advertiserAdCostPerClick(data):
         },
         "series": series_data
     }
-    st_echarts(options=options, height=500, width=800)
+    st_echarts(options=options, height=500, width=1300)
 
 
 
@@ -392,7 +392,7 @@ def returnOnAdSpend(data):
             }
         ]
     }
-    st_echarts(options=options, height=500, width=800)
+    st_echarts(options=options, height=500, width=1300)
 
 
 
@@ -439,3 +439,63 @@ def returnOnAdSpendLiquidFill(data):
         ]
     }
     st_echarts(options=options, height="400px", width="600px")
+
+
+
+
+
+def google_ads_spent(data):
+    df = pd.DataFrame(data)
+    df["advertiserAdCost"]   = pd.to_numeric(df["advertiserAdCost"], errors='coerce')
+    df["advertiserAdCost"]   = df["advertiserAdCost"].fillna(0)
+    df["simpleCampaignName"] = df["campaignName"].apply(lambda x: x.split(' - ')[-1])
+    summed_data              = df.groupby("simpleCampaignName")["advertiserAdCost"].sum().reset_index()
+    total_ads_spend          = float(summed_data["advertiserAdCost"].sum())
+
+    chart_data = [
+        {"value": round(row["advertiserAdCost"], 0), "name": row["simpleCampaignName"]}
+        for _, row in summed_data.iterrows()
+    ]
+    options = {
+        "title": {
+            "text": f"Total Ad Spend: R${total_ads_spend:,.0f}",
+            "left": "center"
+        },
+        "tooltip": {
+            "trigger": "item"
+        },
+        "legend": {
+            "orient": "vertical",
+            "right": "20%",
+            "top": "middle",
+        },
+        "series": [
+            {
+                "name": "Ad Spend",
+                "type": "pie",
+                "radius": ["42%", "70%"],
+                "avoidLabelOverlap": False,
+                "itemStyle": {
+                    "borderRadius": 10,
+                    "borderColor": "#fff",
+                    "borderWidth": 2
+                },
+                "label": {
+                    "show": False,
+                    "position": "center"
+                },
+                "emphasis": {
+                    "label": {
+                        "show": True,
+                        "fontSize": "20",
+                        "fontWeight": "bold"
+                    }
+                },
+                "labelLine": {
+                    "show": False
+                },
+                "data": chart_data
+            }
+        ]
+    }
+    st_echarts(options=options)

@@ -59,7 +59,7 @@ try:
     except:
         pass
 
-    col1, col2, col3, col4, col5 = st.columns([1,1,1,1,1])
+    col1, col2, col3, col4, col5, col6 = st.columns([1,1,1,1,1,1])
     with col1:
         title = "Total de Visualizações de Página"
         cards(title , page_views.sum()[0])
@@ -75,6 +75,12 @@ try:
     with col5:
         title = "Impressões Virais"
         cards(title , page_impressions_viral.sum()[0])
+    try:
+        with col6:
+            title = "Total Spend"
+            cards(title , int(spend.nunique()))
+    except:
+        pass
     st.divider()
     if page_insights:
         page_impression_engagement(page_post_engagements, page_impressions, page_impressions_unique, dates)
