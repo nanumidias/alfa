@@ -1,5 +1,5 @@
 import streamlit as st
-
+import traceback
 from logics.date_range import *
 
 from plots.plots_instagram import *
@@ -14,8 +14,10 @@ st.sidebar.page_link("pages/Google_Ads_Performance.py",       label="Google",   
 st.sidebar.page_link("pages/facebook_ads.py",                 label="Facebook",     icon="👥", disabled=False)
 st.sidebar.page_link("pages/instagram_data.py",               label="Instagram",    icon="👥", disabled=False)
 
-access_token            = st.secrets["access_tokens"]["user_access_token"]
-instagram_user_id       = st.secrets["instagram"]["instagram_user_id"]
+
+
+
+
 
 start_date, end_date = date_range()
 
@@ -23,9 +25,13 @@ export_button = st.sidebar.toggle("Export_Data")
 if export_button:
     export_data(start_date, end_date)
 
+
+access_token            = st.secrets["access_tokens"]["user_access_token"]
+instagram_user_id       = st.secrets["instagram"]["instagram_user_id"]
+
 if instagram_user_id and access_token:
     try:
-        (dates, start_date, end_date,  ig_insights_by_total_values, 
+        (dates,ig_insights_by_total_values, 
          impressions_values, reach_values, 
          profile_views_values, follower_count_values, 
          email_contacts, phone_call_clicks, 
@@ -62,7 +68,10 @@ if instagram_user_id and access_token:
             total_likes_by_titled_line_plot(ig_insights_by_total_values)
         with col2:
             total_likes_by_titled_pie_chart(ig_insights_by_total_values)          
-    except:
-        pass
-
+    except Exception as e:
+        st.error("An error occurred: " + str(e))
+        st.error(traceback.format_exc())
+else:
+    st.title("Instagram Data")
+    st.error("Instagram ID and Access Token is invalid")
 
