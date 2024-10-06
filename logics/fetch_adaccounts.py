@@ -21,6 +21,7 @@ def get_ad_accounts(access_token,specific_account_id):
     }
     response = requests.get(url, params=params)
     data = response.json()
+    # st.write(data)
     specific_account_data = [account for account in data['data'] if account['account_id'] == specific_account_id]
     return specific_account_data
 
