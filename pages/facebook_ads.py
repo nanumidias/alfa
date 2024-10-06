@@ -38,12 +38,30 @@ export_button = st.sidebar.toggle("Export_Data")
 if export_button:
     export_data(start_date, end_date)
 try:
+    # facebook_api_data_load(page_id, start_date, end_date)
+    # (page_insights, dates, page_post_engagements, page_impressions, page_impressions_unique, 
+    # page_fans, unique_page_fan, page_follows, page_views, 
+    # page_negative_feedback_unique, page_impressions_viral, 
+    # page_fan_adds_by_paid_non_paid_unique, page_daily_follows_unique, 
+    # page_daily_unfollows_unique, page_impressions_by_age_gender_unique, 
+    # page_impressions_organic_unique_v2, page_impressions_paid, post_reactions, 
+    # page_fans_country, page_fan_adds, page_fan_removes)  = facebook_api_data_load(page_id, start_date, end_date)
+    # ads_insights_, ada_account =  facebook_ads_data_load(user_access_token, adaccount_account_id, adaccount_id, selected_range)
+    # ads_insights  = pd.DataFrame(ads_insights_)
+
+
+    # ------------------------------Invalid Insights------------------------------   
+    # --> page_negative_feedback_unique
+    # --> page_impressions_by_age_gender_unique
+    # --> page_impressions_organic_unique_v2
+
+  
     (page_insights, dates, page_post_engagements, page_impressions, page_impressions_unique, 
     page_fans, unique_page_fan, page_follows, page_views, 
-    page_negative_feedback_unique, page_impressions_viral, 
+    page_impressions_viral, 
     page_fan_adds_by_paid_non_paid_unique, page_daily_follows_unique, 
-    page_daily_unfollows_unique, page_impressions_by_age_gender_unique, 
-    page_impressions_organic_unique_v2, page_impressions_paid, post_reactions, 
+    page_daily_unfollows_unique, 
+    page_impressions_paid, post_reactions, 
     page_fans_country, page_fan_adds, page_fan_removes)  = facebook_api_data_load(page_id, start_date, end_date)
     ads_insights_, ada_account =  facebook_ads_data_load(user_access_token, adaccount_account_id, adaccount_id, selected_range)
     ads_insights  = pd.DataFrame(ads_insights_)
@@ -69,14 +87,14 @@ try:
     with col3:
         title = "Total de Curtidas"
         cards(title , unique_page_fan)
+    # with col4:
+    #     title = "Feedbacks Negativos"
+    #     cards(title , page_negative_feedback_unique.sum()[0])
     with col4:
-        title = "Feedbacks Negativos"
-        cards(title , page_negative_feedback_unique.sum()[0])
-    with col5:
         title = "Impressões Virais"
         cards(title , page_impressions_viral.sum()[0])
     try:
-        with col6:
+        with col5:
             title = "Total Spend"
             cards(title , int(spend.nunique()))
     except:
@@ -92,12 +110,14 @@ try:
         try:
             col1, col2 = st.columns([1,1])
             with col1:
-                page_impressions_by_age_gender_male(page_impressions_by_age_gender_unique, dates)
+                pass
+                # page_impressions_by_age_gender_male(page_impressions_by_age_gender_unique, dates)
             with col2:
-                page_impressions_by_age_gender_female(page_impressions_by_age_gender_unique, dates)
+                pass
+                # page_impressions_by_age_gender_female(page_impressions_by_age_gender_unique, dates)
         except:
             pass
-        page_impressions_organic_paid(page_impressions_organic_unique_v2, page_impressions_paid,  dates)
+        # page_impressions_organic_paid(page_impressions_organic_unique_v2, page_impressions_paid,  dates)
         st.divider()
         col1, col2 = st.columns([1,1])
         with col1:

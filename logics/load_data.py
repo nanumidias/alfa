@@ -74,6 +74,10 @@ def facebook_api_data_load(page_id, start_date, end_date):
     page_insights = get_page_insights(page_id, str(start_date), str(end_date))
     dates = [datetime.strptime(page_insights[0]["values"][i]["end_time"][:10], "%Y-%m-%d").strftime("%Y-%m-%d") for i in range(len(page_insights[0]["values"]))]
 
+    # ------------------------------Invalid Insights------------------------------   
+    # --> page_negative_feedback_unique
+    # --> page_impressions_by_age_gender_unique
+    # --> page_impressions_organic_unique_v2
     page_post_engagements                 = [data["value"] for data in page_insights[0]["values"]]
     page_impressions                      = [data["value"] for data in page_insights[1]["values"]]
     page_impressions_unique               = [data["value"] for data in page_insights[2]["values"]]
@@ -87,32 +91,58 @@ def facebook_api_data_load(page_id, start_date, end_date):
     page_views                            = [data["value"] for data in page_insights[5]["values"]]
     page_views                            = pd.DataFrame(page_views)
 
-    page_negative_feedback_unique         = [data["value"] for data in page_insights[6]["values"]]
-    page_negative_feedback_unique         = pd.DataFrame(page_negative_feedback_unique)
+                # page_negative_feedback_unique         = [data["value"] for data in page_insights[6]["values"]]
+                # page_negative_feedback_unique         = pd.DataFrame(page_negative_feedback_unique)
 
-    page_impressions_viral                = [data["value"] for data in page_insights[7]["values"]]
+    page_impressions_viral                = [data["value"] for data in page_insights[6]["values"]]
     page_impressions_viral                = pd.DataFrame(page_impressions_viral)
 
-    page_fan_adds_by_paid_non_paid_unique = [data["value"] for data in page_insights[8]["values"]]
+    page_fan_adds_by_paid_non_paid_unique = [data["value"] for data in page_insights[7]["values"]]
     page_fan_adds_by_paid_non_paid_unique = pd.DataFrame(page_fan_adds_by_paid_non_paid_unique)
 
-    page_daily_follows_unique             = [data["value"] for data in page_insights[9]["values"]]
+    page_daily_follows_unique             = [data["value"] for data in page_insights[8]["values"]]
     page_daily_follows_unique             = pd.DataFrame(page_daily_follows_unique)
 
-    page_daily_follows_unique             = [data["value"] for data in page_insights[9]["values"]]
-    page_daily_unfollows_unique           = [data["value"] for data in page_insights[10]["values"]]
+    page_daily_follows_unique             = [data["value"] for data in page_insights[8]["values"]]
+    page_daily_unfollows_unique           = [data["value"] for data in page_insights[9]["values"]]
 
-    page_impressions_by_age_gender_unique = [data["value"] for data in page_insights[11]["values"]]
-    page_impressions_by_age_gender_unique = pd.DataFrame(page_impressions_by_age_gender_unique)
+                # page_impressions_by_age_gender_unique = [data["value"] for data in page_insights[11]["values"]]
+                # page_impressions_by_age_gender_unique = pd.DataFrame(page_impressions_by_age_gender_unique)
 
-    page_impressions_organic_unique_v2    = [data["value"] for data in page_insights[12]["values"]]
-    page_impressions_paid                 = [data["value"] for data in page_insights[13]["values"]]
-    post_reactions                        = [data["value"] for data in page_insights[14]["values"]]
-    page_fans_country                     = [data["value"] for data in page_insights[15]["values"]]
-    page_fan_adds                         = [data["value"] for data in page_insights[16]["values"]]
-    page_fan_removes                      = [data["value"] for data in page_insights[17]["values"]]
+                # page_impressions_organic_unique_v2    = [data["value"] for data in page_insights[12]["values"]]
 
-    return page_insights, dates, page_post_engagements, page_impressions, page_impressions_unique, page_fans, unique_page_fan, page_follows, page_views, page_negative_feedback_unique, page_impressions_viral, page_fan_adds_by_paid_non_paid_unique, page_daily_follows_unique, page_daily_unfollows_unique, page_impressions_by_age_gender_unique, page_impressions_organic_unique_v2, page_impressions_paid, post_reactions, page_fans_country, page_fan_adds, page_fan_removes
+    page_impressions_paid                 = [data["value"] for data in page_insights[10]["values"]]
+    post_reactions                        = [data["value"] for data in page_insights[11]["values"]]
+    page_fans_country                     = [data["value"] for data in page_insights[12]["values"]]
+    page_fan_adds                         = [data["value"] for data in page_insights[13]["values"]]
+    page_fan_removes                      = [data["value"] for data in page_insights[14]["values"]]
+
+    # __________________________________________________________________________________
+    # _______________________________DEBUGGING STATEMENTS_______________________________
+    # __________________________________________________________________________________
+    # st.write("DEBUGGING STATEMENTS")
+    # st.write(page_post_engagements)
+    # st.write(page_impressions)
+    # st.write(page_impressions_unique)
+    # st.write(page_fans)
+    # st.write(unique_page_fan)
+    # st.write(page_follows)
+    # st.write(page_views)
+                                        # st.write(page_negative_feedback_unique)
+    # st.write(page_impressions_viral)
+    # st.write(page_fan_adds_by_paid_non_paid_unique)
+    # st.write(page_daily_follows_unique)
+    # st.write(page_daily_unfollows_unique)
+                                        # st.write(page_impressions_by_age_gender_unique)
+                                        # st.write(page_impressions_organic_unique_v2)
+    # st.write(page_impressions_paid)
+    # st.write(post_reactions)
+    # st.write(page_fans_country)
+    # st.write(page_fan_adds)
+    # st.write(page_fan_removes)
+
+    # return page_insights, dates, page_post_engagements, page_impressions, page_impressions_unique, page_fans, unique_page_fan, page_follows, page_views, page_negative_feedback_unique, page_impressions_viral, page_fan_adds_by_paid_non_paid_unique, page_daily_follows_unique, page_daily_unfollows_unique, page_impressions_by_age_gender_unique, page_impressions_organic_unique_v2, page_impressions_paid, post_reactions, page_fans_country, page_fan_adds, page_fan_removes
+    return page_insights, dates, page_post_engagements, page_impressions, page_impressions_unique, page_fans, unique_page_fan, page_follows, page_views, page_impressions_viral, page_fan_adds_by_paid_non_paid_unique, page_daily_follows_unique, page_daily_unfollows_unique, page_impressions_paid, post_reactions, page_fans_country, page_fan_adds, page_fan_removes
 
 
 def instagram_data_load(instagram_user_id, access_token, start_date, end_date):

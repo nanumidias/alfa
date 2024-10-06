@@ -1,8 +1,8 @@
-,Unnamed: 0.1,Unnamed: 0,category,Clientes pendentes,horario,clientes_atendidos,canais,quantidade_atendimentos,Contatos Atendidos Hoje,Contatos fidelizados / Mês,Contatos em chatbot,Atendimentos finalizados
-0,0,0,Chat,10,00:00,1,Chat,8,8,276,340,18
-1,1,1,E-mail,20,04:00,1,E-mail,2,2,55,450,30
-2,2,2,WhatsApp,30,05:00,1,WhatsApp,30,30,33,220,13
-3,3,3,Chat,40,06:00,2,Chat,20,20,77,110,55
-4,4,4,Instagram,20,08:00,4,Instagram,10,10,55,340,33
-5,5,5,WhatsApp,40,09:00,18,WhatsApp,20,20,33,450,22
-6,6,6,Facebook,10,10:00,9,Facebook,5,5,77,220,11
+,Unnamed: 0.2,Unnamed: 0.1,Unnamed: 0,category,Clientes pendentes,horario,clientes_atendidos,canais,quantidade_atendimentos,Contatos Atendidos Hoje,Contatos fidelizados / Mês,Contatos em chatbot,Atendimentos finalizados
+0,0,0,0,Chat,10,00:00,1,Chat,8,8,276,340,18
+1,1,1,1,E-mail,20,04:00,1,E-mail,2,2,55,450,30
+2,2,2,2,WhatsApp,30,05:00,1,WhatsApp,30,30,33,220,13
+3,3,3,3,Chat,40,06:00,2,Chat,20,20,77,110,55
+4,4,4,4,Instagram,20,08:00,4,Instagram,10,10,55,340,33
+5,5,5,5,WhatsApp,40,09:00,18,WhatsApp,20,20,33,450,22
+6,6,6,6,Facebook,10,10:00,9,Facebook,5,5,77,220,11

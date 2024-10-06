@@ -16,7 +16,7 @@ def get_ad_accounts(access_token,specific_account_id):
         'date_preset': 'last_14d',  # Set the date preset (e.g., 'today', 'yesterday', 'last_7d', 'last_30d', etc.)
         'time_range': {  # Set a custom time range (optional, overrides date_preset)
             'since': '2024-07-01',
-            'until': '2024-07-11'
+            'until': '2024-07-05'
         }
     }
     response = requests.get(url, params=params)
